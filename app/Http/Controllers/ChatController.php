@@ -8,23 +8,23 @@ use App\Models\Message;
 
 class ChatController extends Controller
 {
-    // عرض المحادثة
+   
     public function index()
-    { // التحقق من تسجيل الدخول
+    { 
         if (auth('student')->check()) {
             $student_id = auth()->student()->id;
     
-            // إدخال بيانات المحادثة
+          
             Chat::create([
                 'student_id' => $student_id,
-                'support_id' => 1,  // تأكد من صحة قيمة support_id
+                'support_id' => 1,  
                 'updated_at' => now(),
                 'created_at' => now(),
             ]);
     
-            return view('chat.reply'); // تعديل اسم العرض حسب الحاجة
+            return view('chat.reply'); 
         } else {
-            // إذا لم يكن الطالب مسجلاً الدخول
+            
             return redirect()->route('students.login')->with('error', 'You need to log in first.');
         }
     }
@@ -46,24 +46,24 @@ class ChatController extends Controller
     // تخزين الرسائل في المحادثة
     public function storeMessage(Request $request, $chatId)
     {
-        // تحقق من البيانات الواردة
+        
         $validated = $request->validate([
             'message' => 'required|string',
         ]);
 
-        // تحقق من أن الطالب مسجل دخوله
+     
         if (!auth()->check()) {
             return response()->json(['message' => 'You must be logged in to send a message'], 401);
         }
 
-        // جلب الـ student_id
+       
         $studentId = auth()->id();
 
         // إضافة الرسالة
         Message::create([
             'chat_id' => $chatId,
             'message' => $validated['message'],
-            'user_id' => $studentId,  // تعيين الـ student_id هنا
+            'user_id' => $studentId, 
         ]);
 
         return response()->json(['message' => 'Message stored successfully!']);

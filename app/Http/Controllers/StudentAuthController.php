@@ -11,7 +11,7 @@ class StudentAuthController extends Controller
     public function index()
     {
     
-        return view('index'); // عرض صفحة لوحة التحكم
+        return view('index'); 
     }
     public function showLoginForm()
     {
@@ -19,10 +19,10 @@ class StudentAuthController extends Controller
     }
 
     public function login(Request $request)
-    {   // التحقق من صحة البيانات المدخلة
+    {   
         $request->validate([
-            'email' => 'required|email', // تحقق من أن البريد الإلكتروني غير فارغ ويجب أن يكون بتنسيق صحيح
-            'password' => 'required|min:8', // تحقق من أن كلمة المرور غير فارغة ويجب أن تكون على الأقل 6 أحرف
+            'email' => 'required|email', 
+            'password' => 'required|min:8', 
         ]
        ,[
             'email.required' => 'البريد الإلكتروني مطلوب.',

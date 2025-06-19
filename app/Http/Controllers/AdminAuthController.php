@@ -10,26 +10,26 @@ class AdminAuthController extends Controller
 {
     //
     public function index()
-    {// تحقق من تسجيل دخول admin
+    {
         if (!Auth::guard('admin')->check()) {
-            // إذا لم يكن موظف الدعم مسجلاً الدخول، أعد توجيهه إلى صفحة تسجيل الدخول
+           
             return Redirect()->route('admin.login');
             
         }
  
-        return view('admin.index'); // عرض صفحة لوحة التحكم
+        return view('admin.index');
     }
 
     public function showLoginForm()
     {
-        return view('auth.admin.login'); // عرض صفحة تسجيل الدخول
+        return view('auth.admin.login'); 
     }
 
     public function login(Request $request)
     {     // التحقق من صحة البيانات المدخلة
         $request->validate([
-            'email' => 'required|email', // تحقق من أن البريد الإلكتروني غير فارغ ويجب أن يكون بتنسيق صحيح
-            'password' => 'required|min:8', // تحقق من أن كلمة المرور غير فارغة ويجب أن تكون على الأقل 6 أحرف
+            'email' => 'required|email', 
+            'password' => 'required|min:8', 
         ]
        ,[
             'email.required' => 'البريد الإلكتروني مطلوب.',
@@ -40,23 +40,22 @@ class AdminAuthController extends Controller
         $credentials = $request->only('email', 'password');
 
         if (Auth::guard('admin')->attempt($credentials)) {
-             // تخزين اسم المستخدم وكلمة المرور في الجلسة
-              // الحصول على المستخدم الذي قام بتسجيل الدخول
+           
         $user = Auth::guard('admin')->user();
         $name = session('name');
-       // dd($user);  // عرض بيانات الجلسة
+    
              if ($user) {
                 session([
                     'name' => $user->name,
                     'email'=>$request->email,
-                    'password' => $request->password, // تخزين كلمة المرور المدخلة
+                    'password' => $request->password, 
                 ]);
 
-            return redirect()->route('admin.dashboard'); // التوجيه إلى لوحة التحكم بعد تسجيل الدخول
+            return redirect()->route('admin.dashboard'); 
         }
     }
     return back()->withErrors(['error' => 'Invalid credentials'])->withInput();
-    // إرسال رسالة خطأ;  // عرض الأخطاء إذا فشل تسجيل الدخول
+  
     }
 
     public function Logout(){

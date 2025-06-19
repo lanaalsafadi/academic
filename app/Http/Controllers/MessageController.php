@@ -11,9 +11,9 @@ class MessageController extends Controller
     //
     public function replymessage1($messageId)
     {
-        $message = Message::find($messageId); // إذا كنت تستخدم طريقة `find`
+        $message = Message::find($messageId); 
     
-        // تحقق إذا كانت الرسالة موجودة
+     
         if (!$message) {
             return redirect()->route('support.dashboard')->with('error', 'Message not found.');
         }
@@ -24,7 +24,7 @@ class MessageController extends Controller
     }
     public function show()
     {
-        $message = Message::where('is_support',0)->get(); // أو أي طريقة أخرى للبحث
+        $message = Message::where('is_support',0)->get(); 
     
         if (!$message) {
             return redirect()->route('support.dashboard')->with('error', 'Message not found.');

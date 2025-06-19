@@ -10,7 +10,7 @@ class UniversityController extends Controller
    
     public function index()
     {
-        $universities = University::all(); // جلب جميع السجلات من قاعدة البيانات
+        $universities = University::all(); 
         return view('admin.universities.index', compact('universities'));
     }
 
@@ -18,12 +18,11 @@ class UniversityController extends Controller
     public function create()
     {
        
-        return view('admin.universities.create'); // عرض صفحة نموذج الإضافة
+        return view('admin.universities.create'); 
     }
 
     public function store(Request $request)
  {
-        // التحقق من صحة البيانات المدخلة
         $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
@@ -32,7 +31,7 @@ class UniversityController extends Controller
             'website' => 'nullable|url',
         ]);
 
-        // إنشاء سجل جديد في الجدول
+       
         University::create($request->all());
 
         return redirect()->route('admin.universities.index')->with('success', 'University created successfully.');
@@ -41,21 +40,21 @@ class UniversityController extends Controller
    
     public function show($id)
     {
-        $university = University::findOrFail($id); // جلب السجل باستخدام المعرف
+        $university = University::findOrFail($id); 
         return view('admin.universities.show', compact('university'));
     }
 
   
     public function edit($id)
     {
-        $university = University::findOrFail($id); // جلب السجل لتعديله
+        $university = University::findOrFail($id); 
         return view('admin.universities.edit', compact('university'));
     }
 
     
     public function update(Request $request, $id)
     {
-        // التحقق من صحة البيانات المدخلة
+        
         $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
@@ -64,8 +63,8 @@ class UniversityController extends Controller
             'website' => 'nullable|url',
         ]);
 
-        $university = University::findOrFail($id); // جلب السجل المطلوب
-        $university->update($request->all()); // تحديث البيانات
+        $university = University::findOrFail($id); 
+        $university->update($request->all()); 
 
         return redirect()->route('admin.universities.index')->with('success', 'University updated successfully.');
     }
@@ -73,8 +72,8 @@ class UniversityController extends Controller
    
     public function destroy($id)
     {
-        $university = University::findOrFail($id); // جلب السجل المطلوب
-        $university->delete(); // حذف السجل
+        $university = University::findOrFail($id); 
+        $university->delete(); 
 
         return redirect()->route('admin.universities.index')->with('success', 'University deleted successfully.');
     }

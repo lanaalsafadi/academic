@@ -17,22 +17,22 @@ class PaidProgramRequestController extends Controller
             'type' => 'in:master,university,phd',
             
         ]);
-            // التحقق من وجود الطالب والبرنامج المدفوع
+            
             $student = Student::find($request->student_id);
             $paidProgram = Paidprograms::find($request->paid_program_id);
     
-            // إذا كان الطالب والبرنامج المدفوع موجودين، قم بتخزين الطلب
+            
             if ($student && $paidProgram) {
-                   // التحقق من أن الطالب لم يتقدم مسبقًا على نفس البرنامج المدفوع
+                 
         $existingRequest = RequestPaidProgram::where('student_id', $student->id)
         ->where('paid_program_id', $paidProgram->id)
         ->first();
 
-// إذا كان الطالب قد تقدم مسبقًا، إظهار رسالة الخطأ
+
 if ($existingRequest) {
 return redirect()->back()->with('error', 'لقد تقدمت مسبقًا لهذا البرنامج المدفوع.');
 }
-                // إنشاء سجل في جدول request_paid_programs
+              
                 RequestPaidProgram::create([
                     'student_id' => $student->id,
                     'student_name' => $student->name,
@@ -41,11 +41,11 @@ return redirect()->back()->with('error', 'لقد تقدمت مسبقًا لهذ�
                     'application_date' => now(),
                 ]);
     
-                   // إعادة توجيه الطالب إلى رابط المنحة
+                
         return redirect($paidProgram->application_url)->with('success', 'تم التقديم للمنحة بنجاح!');
             }
     
-            // إعادة التوجيه مع رسالة خطأ إذا لم يتم العثور على الطالب أو البرنامج المدفوع
+           
             return redirect()->back()->with('error', 'خطأ في التقديم. تأكد من وجود الطالب والبرنامج المدفوع.');
         }
     

@@ -11,12 +11,12 @@ class SupportAuthController extends Controller
     {
       
 
-       // تحقق من تسجيل دخول موظف الدعم
+     
        if (!Auth::guard('support')->check()) {
-        // إذا لم يكن موظف الدعم مسجلاً الدخول، أعد توجيهه إلى صفحة تسجيل الدخول
+  
         return Redirect()->route('support.login');
     }
-        return view('support.index'); // عرض صفحة لوحة التحكم
+        return view('support.index'); 
     }
     public function showLoginForm()
     {
@@ -24,10 +24,10 @@ class SupportAuthController extends Controller
     }
 
     public function login(Request $request)
-    {   // التحقق من صحة البيانات المدخلة
+    {   
         $request->validate([
-            'email' => 'required|email', // تحقق من أن البريد الإلكتروني غير فارغ ويجب أن يكون بتنسيق صحيح
-            'password' => 'required|min:8', // تحقق من أن كلمة المرور غير فارغة ويجب أن تكون على الأقل 6 أحرف
+            'email' => 'required|email',
+            'password' => 'required|min:8', 
         ]
        ,[
             'email.required' => 'البريد الإلكتروني مطلوب.',

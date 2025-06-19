@@ -17,13 +17,11 @@ class ReportController extends Controller
     public function generateStudentReport(Request $request)
     {
       
-        // جلب التاريخ من الطلب
+       
         $startDate = $request->input('start_date');
         $endDate = $request->input('end_date');
    
-        // جلب الطلاب الذين سجلوا بين التواريخ
         $students = Student::whereBetween('created_at', [$startDate, $endDate])->get();
-      // حساب عدد الطلاب
       $studentCount = $students->count();
 
   
@@ -48,7 +46,6 @@ class ReportController extends Controller
     $startDate = $request->input('start_date');
     $endDate = $request->input('end_date');
   
-    // جلب الـ Supports الذين تم إنشاؤهم بين التواريخ
     $supports = ASupports::whereBetween('created_at', [$startDate, $endDate])->get();
     $supportsCount = $supports ->count();
   
@@ -62,7 +59,7 @@ public function generatePaidProgramReport(Request $request)
     $startDate = $request->input('start_date');
     $endDate = $request->input('end_date');
 
-    // جلب البرامج الدراسية التي تم إنشاؤها بين التواريخ
+   
     $paidprograms = Paidprograms::whereBetween('created_at', [$startDate, $endDate])->get();
     $paidprogramsCount = $paidprograms->count();
     return view('admin.report.paidprograms', compact('paidprograms', 'startDate', 'endDate','paidprogramsCount'));
@@ -73,17 +70,17 @@ public function downloadPdf(Request $request)
 {
     $startDate = $request->start_date;
     $endDate = $request->end_date;
-  // جلب ID المسؤول (Admin) الذي قام بإنشاء التقرير
+
   $adminId = Auth::guard('admin')->id();
 
-  // حفظ التقرير في قاعدة البيانات
+
   Report::create([
       'report_type' => 'Student', 
       'start_date' => $startDate,
       'end_date' => $endDate,
-      'generated_by' => $adminId, // المعرف المسؤول
+      'generated_by' => $adminId,
   ]);
-    // جلب البيانات من قاعدة البيانات
+   
     $students = Student::whereBetween('created_at', [$startDate, $endDate])->get();
 
     // محتوى PDF الديناميكي
@@ -119,17 +116,17 @@ public function downloadScholarshipPdf(Request $request)
     $endDate = $request->end_date;
     $adminId = Auth::guard('admin')->id();
 
-    // حفظ التقرير في قاعدة البيانات
+ 
     Report::create([
         'report_type' => 'Scholarships', 
         'start_date' => $startDate,
         'end_date' => $endDate,
-        'generated_by' => $adminId, // المعرف المسؤول
+        'generated_by' => $adminId, 
     ]);
-    // جلب البيانات من نموذج Scholarship
+
     $scholarships = Scholarships::whereBetween('created_at', [$startDate, $endDate])->get();
 
-    // محتوى PDF الديناميكي
+
     $htmlContent = '<h1>Scholarship Report</h1>';
     $htmlContent .= '<p>Report Date Range: ' . $startDate . ' to ' . $endDate . '</p>';
     $htmlContent .= '<table border="1" cellpadding="5" cellspacing="0" style="width: 100%;">';
@@ -148,10 +145,9 @@ public function downloadScholarshipPdf(Request $request)
     $htmlContent .= '</tbody>';
     $htmlContent .= '</table>';
 
-    // إنشاء PDF باستخدام المحتوى
+  
     $pdf = PDF::loadHTML($htmlContent);
 
-    // تحميل الملف
     return $pdf->download('scholarship_report_' . now()->format('Y-m-d') . '.pdf');
 }
 
@@ -161,17 +157,17 @@ public function downloadPaidProgramPdf(Request $request)
     $endDate = $request->end_date;
     $adminId = Auth::guard('admin')->id();
 
-    // حفظ التقرير في قاعدة البيانات
+ 
     Report::create([
         'report_type' => 'PaidPrograms', 
         'start_date' => $startDate,
         'end_date' => $endDate,
-        'generated_by' => $adminId, // المعرف المسؤول
+        'generated_by' => $adminId,
     ]);
-    // جلب البيانات من نموذج PaidProgram
+   
     $paidPrograms = PaidPrograms::whereBetween('created_at', [$startDate, $endDate])->get();
 
-    // محتوى PDF الديناميكي
+
     $htmlContent = '<h1>Paid Program Report</h1>';
     $htmlContent .= '<p>Report Date Range: ' . $startDate . ' to ' . $endDate . '</p>';
     $htmlContent .= '<table border="1" cellpadding="5" cellspacing="0" style="width: 100%;">';
@@ -190,10 +186,10 @@ public function downloadPaidProgramPdf(Request $request)
     $htmlContent .= '</tbody>';
     $htmlContent .= '</table>';
 
-    // إنشاء PDF باستخدام المحتوى
+
     $pdf = PDF::loadHTML($htmlContent);
 
-    // تحميل الملف
+
     return $pdf->download('paid_program_report_' . now()->format('Y-m-d') . '.pdf');
 }
 
@@ -204,17 +200,15 @@ public function downloadSupportPdf(Request $request)
     $endDate = $request->end_date;
     $adminId = Auth::guard('admin')->id();
 
-    // حفظ التقرير في قاعدة البيانات
     Report::create([
         'report_type' => 'ASupports', 
         'start_date' => $startDate,
         'end_date' => $endDate,
-        'generated_by' => $adminId, // المعرف المسؤول
+        'generated_by' => $adminId, 
     ]);
-    // جلب البيانات من نموذج Support
+ 
     $supports = ASupports::whereBetween('created_at', [$startDate, $endDate])->get();
 
-    // محتوى PDF الديناميكي
     $htmlContent = '<h1>Support Report</h1>';
     $htmlContent .= '<p>Report Date Range: ' . $startDate . ' to ' . $endDate . '</p>';
     $htmlContent .= '<table border="1" cellpadding="5" cellspacing="0" style="width: 100%;">';
@@ -233,10 +227,10 @@ public function downloadSupportPdf(Request $request)
     $htmlContent .= '</tbody>';
     $htmlContent .= '</table>';
 
-    // إنشاء PDF باستخدام المحتوى
+
     $pdf = PDF::loadHTML($htmlContent);
 
-    // تحميل الملف
+
     return $pdf->download('support_report_' . now()->format('Y-m-d') . '.pdf');
 }
     

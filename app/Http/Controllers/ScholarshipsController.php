@@ -11,35 +11,35 @@ class ScholarshipsController extends Controller
      // عرض جميع المنح الدراسية مع الجامعة المرتبطة
      public function index()
      {
-         // جلب المنح الدراسية مع الجامعة المرتبطة بها
+      
          $scholarships = Scholarships::all();
 
-         // عرض البيانات في الـ View
+         
          return view('admin.scholarships.index', compact('scholarships'));
      }
      public function showscholarships()
      {
-         // جلب جميع المنح الدراسية من قاعدة البيانات
+         
          $scholarships = Scholarships::all();
  
-         // إرسال البيانات إلى الصفحة
+         
          return view('scholarships', compact('scholarships'));
      }
  
      // عرض نموذج إنشاء منحة دراسية جديدة
      public function create()
      {
-         // جلب جميع الجامعات
+        
          $universities = University::all();
  
-         // عرض صفحة إضافة منحة دراسية جديدة مع قائمة الجامعات
+         
          return view('admin.scholarships.create', compact('universities'));
      }
  
      // تخزين المنحة الدراسية في قاعدة البيانات
      public function store(Request $request)
      {
-         // التحقق من البيانات المدخلة
+         
          $request->validate([
              'university_ID' => 'required|exists:universities,id',
              'name' => 'required|string|max:255',
@@ -56,7 +56,7 @@ class ScholarshipsController extends Controller
              'application_url' => 'nullable|url'
          ]);
  
-         // إنشاء منحة دراسية جديدة
+       
          Scholarships::create([
              'university_ID' => $request->university_ID,
              'name' => $request->name,
@@ -73,29 +73,26 @@ class ScholarshipsController extends Controller
              'application_url' => $request->application_url,
          ]);
  
-         // إعادة التوجيه مع رسالة نجاح
+       
          return redirect()->route('admin.scholarships.index')->with('success', 'Scholarship created successfully.');
      }
  
-     // عرض نموذج تعديل المنحة الدراسية
+ 
      public function edit($id)
      {
-        $scholarship = Scholarships::where('scholarships_ID', $id)->firstOrFail();// جلب المنحة الدراسية التي سيتم تعديلها مع الجامعة المرتبطة
-         
-       
- 
-         // جلب جميع الجامعات
+        $scholarship = Scholarships::where('scholarships_ID', $id)->firstOrFail();
+      
          $universities = University::all();
       
  
-         // عرض صفحة تعديل المنحة الدراسية
+        
          return view('admin.scholarships.edit', compact('scholarship', 'universities'));
      }
  
      // تحديث المنحة الدراسية
      public function update(Request $request, $id)
      { 
-         // التحقق من البيانات المدخلة
+         
          $request->validate([
              'university_ID' => 'required|exists:universities,id',
              'name' => 'required|string|max:255',
@@ -112,10 +109,10 @@ class ScholarshipsController extends Controller
              'application_url' => 'nullable|url'
          ]); 
  
-         // جلب المنحة الدراسية التي سيتم تعديلها
+       
          $scholarship = Scholarships::where('scholarships_ID', $id)->firstOrFail();
          
-         // تحديث البيانات
+        
              
          $scholarship->update([ 
              'university_ID' => $request->university_ID,
@@ -133,20 +130,20 @@ class ScholarshipsController extends Controller
              'application_url' => $request->application_url,
          ]);
  
-         // إعادة التوجيه مع رسالة نجاح
+         
          return redirect()->route('admin.scholarships.index')->with('success', 'Scholarship updated successfully.');
      }
  
      // حذف المنحة الدراسية
      public function destroy($id)
      {   
-         // جلب المنحة الدراسية التي سيتم حذفها
+         
          $scholarship = Scholarships::where('scholarships_ID', $id)->firstOrFail();
  
-         // حذف المنحة الدراسية
+         
          $scholarship->delete();
  
-         // إعادة التوجيه مع رسالة نجاح
+         
          return redirect()->route('admin.scholarships.index')->with('success', 'Scholarship deleted successfully.');
      }
 
@@ -154,34 +151,34 @@ class ScholarshipsController extends Controller
      {
          $query = Scholarships::query();
      
-         // فحص إذا كان المستخدم قد اختار جامعة والبحث عنها
+         
          if ($request->filled('university')) {
              $query->whereHas('university', function($query) use ($request) {
                  $query->where('name', 'LIKE', '%' . $request->university . '%');
              });
          }
      
-         // فحص إذا كان المستخدم قد اختار دولة والبحث عنها
+        
          if ($request->filled('place')) {
              $query->where('country', 'LIKE', '%' . $request->place . '%');
          }
      
-         // فحص إذا كان المستخدم قد اختار نوع تمويل والبحث عنه
+   
          if ($request->filled('fundingType')) {
              $query->where('funding_type', 'LIKE', '%' . $request->fundingType . '%');
          }
-          // فحص إذا كان المستخدم قد اختار type
+          
           if ($request->filled('type')) {
             $query->where('type', 'LIKE', '%' . $request->type . '%');
         }
      
-         // جلب الدول بدون تكرار
+     
          $countries = Scholarships::distinct()->get(['country']);
          
-         // جلب الجامعات بدون تكرار
+    
          $universities = University::distinct()->get(['name']);
      
-         // جلب البيانات مع العلاقة
+      
          $scholarships = $query->with('university')->get();
      
          $type=Scholarships::distinct()->get(['type']);
