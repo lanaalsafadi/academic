@@ -39,20 +39,12 @@ class AdminAuthController extends Controller
     );
         $credentials = $request->only('email', 'password');
 
-        if (Auth::guard('admin')->attempt($credentials)) {
-           
+     if (Auth::guard('admin')->attempt($credentials)) {
+        // جلب المستخدم المُسجّل دخوله
         $user = Auth::guard('admin')->user();
-        $name = session('name');
-    
-             if ($user) {
-                session([
-                    'name' => $user->name,
-                    'email'=>$request->email,
-                   
-                ]);
 
-            return redirect()->route('admin.dashboard'); 
-        }
+        // توجيه إلى لوحة تحكم الأدمن
+        return redirect()->route('admin.dashboard');
     }
     return back()->withErrors(['error' => 'Invalid credentials'])->withInput();
   
