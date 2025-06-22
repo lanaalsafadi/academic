@@ -48,7 +48,7 @@ class AdminAuthController extends Controller
                 session([
                     'name' => $user->name,
                     'email'=>$request->email,
-                    'password' => $request->password, 
+                   
                 ]);
 
             return redirect()->route('admin.dashboard'); 
@@ -59,7 +59,8 @@ class AdminAuthController extends Controller
     }
 
     public function Logout(){
-    	Auth::logout();
+    	 Auth::guard('admin')->logout(); 
+         session()->flush(); // سيحذف كل بيانات الجلسة
     	return Redirect()->route('admin.login');
 
     }

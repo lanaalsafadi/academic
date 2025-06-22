@@ -46,7 +46,7 @@
                             </ul>
                         </div>
                     @endif  
-     <form method="POST" action="{{ route('support.login') }}">
+     <form method="POST" action="{{ route('support.login.post') }}">
             @csrf
 
         <div class="form-group">

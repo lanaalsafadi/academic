@@ -20,7 +20,7 @@
 
             <!-- نموذج إدخال التواريخ -->
             <form action="{{ route('admin.reports.supports') }}" method="GET">
-                @csrf
+              
                 <div class="form-group">
                     <label for="start_date">Start Date</label>
                     <input type="date" name="start_date" class="form-control" id="start_date" required>
